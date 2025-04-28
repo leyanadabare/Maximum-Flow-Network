@@ -1,8 +1,12 @@
 package maxflow;
 import java.util.*;
+
+/**
+ * Graph class representing the network with vertices and edges
+ */
 public class Graph {
-    private final int V;
-    private final List<Edge>[] adj;
+    private final int V; //Number of vertices
+    private final List<Edge>[] adj; //Number of edges
 
     @SuppressWarnings("unchecked")
     public Graph(int V){
@@ -13,19 +17,47 @@ public class Graph {
         }
     }
 
-    public void addEdge(Edge e){
-        adj[e.from()].add(e);
-        adj[e.to()].add(e);
+    /**
+     * Adds a forward and a residual edge between two vertices
+     * @param from
+     * @param to
+     * @param capacity
+     */
+    public void addEdge(int from, int to, int capacity) {
+        Edge forward = new Edge(from, to, capacity);
+        Edge backward = new Edge(to, from, 0); // Residual edge with 0 initial capacity
+
+        // Link both edges together
+        forward.setResidual(backward);
+        backward.setResidual(forward);
+
+        adj[from].add(forward);
+        adj[to].add(backward);
     }
 
+
+    /**
+     * Returns all edges to a vertex
+     * @param v
+     * @return adj[v]
+     */
     public Iterable<Edge> adj(int v){
         return adj[v];
     }
 
+    /**
+     * Returns the total number of vertices
+     * @return V
+     */
     public int V(){
         return V;
     }
 
+    /**
+     * Returns all original edges in the graph
+     * Excluding residual edges
+     * @return edges
+     */
     public Iterable<Edge> edges(){
         Set<Edge> edges = new HashSet<>();
         for (int v = 0; v < V; v++){
