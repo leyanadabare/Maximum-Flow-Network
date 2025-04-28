@@ -35,6 +35,38 @@ public class Graph {
         adj[to].add(backward);
     }
 
+    /**
+     * Removes an edge from the graph (only removes the forward edge).
+     * @param from Source vertex
+     * @param to Destination vertex
+     * @return True if removed successfully, false otherwise
+     */
+    public boolean removeEdge(int from, int to) {
+        Iterator<Edge> it = adj[from].iterator();
+        while (it.hasNext()) {
+            Edge e = it.next();
+            if (e.from() == from && e.to() == to && e.capacity() > 0) {
+                it.remove(); // Remove only the forward edge
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Finds and returns an edge between two vertices (if it exists).
+     * @param from Source vertex
+     * @param to Destination vertex
+     * @return The Edge object if found, else null
+     */
+    public Edge findEdge(int from, int to) {
+        for (Edge e : adj[from]) {
+            if (e.from() == from && e.to() == to && e.capacity() > 0) {
+                return e;
+            }
+        }
+        return null;
+    }
 
     /**
      * Returns all edges to a vertex
